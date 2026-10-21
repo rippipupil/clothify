@@ -1,0 +1,45 @@
+{
+  "search_metadata": {"status": "Success"},
+  "search_parameters": {"engine": "google_shopping", "q": "sudadera oversize hombre", "gl": "es", "hl": "es"},
+  "shopping_results": [
+    {
+      "position": 1,
+      "title": "Sudadera Oversize Negra Hombre Algodón",
+      "product_link": "https://www.google.com/shopping/product/111",
+      "product_id": "111",
+      "source": "Zalando",
+      "price": "29,99 €",
+      "extracted_price": 29.99,
+      "thumbnail": "https://encrypted-tbn0.gstatic.com/shopping?q=111"
+    },
+    {
+      "position": 2,
+      "title": "Hoodie gris oversize",
+      "link": "https://www.amazon.es/dp/B0TEST",
+      "product_link": "https://www.google.com/shopping/product/222",
+      "product_id": "222",
+      "source": "Amazon.es",
+      "price": "19,50 €",
+      "extracted_price": 19.5,
+      "thumbnail": "https://encrypted-tbn0.gstatic.com/shopping?q=222"
+    },
+    {
+      "position": 3,
+      "title": "Sudadera premium",
+      "product_link": "https://www.google.com/shopping/product/333",
+      "product_id": "333",
+      "source": "El Corte Inglés",
+      "price": "80,00 €",
+      "extracted_price": 80.0,
+      "thumbnail": "https://encrypted-tbn0.gstatic.com/shopping?q=333"
+    },
+    {
+      "position": 4,
+      "title": "Sudadera sin precio",
+      "product_link": "https://www.google.com/shopping/product/444",
+      "product_id": "444",
+      "source": "Shein",
+      "thumbnail": "https://encrypted-tbn0.gstatic.com/shopping?q=444"
+    }
+  ]
+}
