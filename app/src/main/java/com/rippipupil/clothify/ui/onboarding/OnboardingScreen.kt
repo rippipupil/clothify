@@ -48,7 +48,7 @@ fun OnboardingScreen(container: AppContainer) {
             profile = container.profile,
             settings = container.settings,
             analyzer = container.styleAnalyzer,
-            startRefill = { container.appScope.launch { container.pool.refill() } },
+            startRefill = { container.appScope.launch { container.pool.refillIfNeeded() } },
             currentLocation = { container.location.lastKnown() },
         )
     }

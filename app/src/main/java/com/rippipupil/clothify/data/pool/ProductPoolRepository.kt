@@ -13,6 +13,8 @@ import com.rippipupil.clothify.domain.Product
 import com.rippipupil.clothify.domain.QueryPlanner
 import com.rippipupil.clothify.domain.SearchQuery
 import com.rippipupil.clothify.domain.Source
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 data class RefillReport(val added: Int, val failures: Map<Source, SourceFailure>)
 
@@ -28,10 +30,16 @@ class ProductPoolRepository(
     private val products = db.productDao()
     private val seen = db.seenDao()
     private val history = db.queryHistoryDao()
+    private val refillMutex = Mutex()
 
     suspend fun candidates(): List<Product> = products.unseenFresh(freshSince()).map { it.toDomain() }
 
     suspend fun needsRefill(): Boolean = products.countUnseenFresh(freshSince()) < REFILL_THRESHOLD
+
+    /** Rellena solo si hace falta; si ya hay un relleno en marcha, lo espera en vez de repetirlo. */
+    suspend fun refillIfNeeded(): RefillReport = refillMutex.withLock {
+        if (needsRefill()) refill() else RefillReport(0, emptyMap())
+    }
 
     suspend fun refill(): RefillReport {
         val s = settings.current()

@@ -20,6 +20,7 @@ import com.rippipupil.clothify.domain.product
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -123,6 +124,17 @@ class ProductPoolRepositoryTest {
         assertEquals(2, products.size)
         assertEquals(mapOf(Source.GOOGLE_SHOPPING to SourceFailure.BUDGET_EXHAUSTED), failures)
         assertTrue(db.productDao().all().isEmpty())
+    }
+
+    @Test
+    fun concurrentRefillIfNeededSearchesOnlyOnce() = runTest {
+        val wallapop = FakeSource(Source.WALLAPOP, 10)
+        val pool = pool(wallapop)
+        val first = async(Dispatchers.IO) { pool.refillIfNeeded() }
+        val second = async(Dispatchers.IO) { pool.refillIfNeeded() }
+        first.await()
+        second.await()
+        assertEquals(3, wallapop.queries.size)
     }
 
     @Test
