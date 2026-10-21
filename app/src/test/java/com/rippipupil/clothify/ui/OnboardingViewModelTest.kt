@@ -95,6 +95,15 @@ class OnboardingViewModelTest {
     }
 
     @Test
+    fun stateResetsAfterFinishing() = runTest {
+        val vm = vm()
+        vm.togglePreset("vintage")
+        vm.next()
+        vm.finish().join()
+        assertEquals(com.rippipupil.clothify.ui.onboarding.OnboardingState(), vm.state.value)
+    }
+
+    @Test
     fun sizeChipsToggle() {
         val vm = vm()
         vm.setTopSize("M")

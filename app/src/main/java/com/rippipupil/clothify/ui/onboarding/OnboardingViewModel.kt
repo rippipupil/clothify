@@ -91,6 +91,8 @@ class OnboardingViewModel(
             )
         }
         startRefill()
+        // Si más adelante se borran los datos, la bienvenida vuelve a empezar de cero.
+        _state.value = OnboardingState()
     }
 
     private fun toggle(current: String?, value: String) = if (current == value) null else value

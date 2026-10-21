@@ -54,8 +54,9 @@ fun SearchScreen(container: AppContainer) {
     val scope = rememberCoroutineScope()
     var linksFor by remember { mutableStateOf<Set<String>?>(null) }
 
-    val camera = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
-        bitmap?.let(vm::onPhoto)
+    val photoUri = remember { newPhotoUri(context) }
+    val camera = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { saved ->
+        if (saved) scope.launch { loadBitmap(context, photoUri)?.let(vm::onPhoto) }
     }
     val gallery = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) scope.launch { loadBitmap(context, uri)?.let(vm::onPhoto) }
@@ -70,7 +71,7 @@ fun SearchScreen(container: AppContainer) {
             ) {
                 Text("Busca con una foto", style = MaterialTheme.typography.headlineSmall)
                 Text("Saca o elige una foto de una prenda y te enseño prendas reales parecidas.")
-                Button(onClick = { camera.launch(null) }) { Text("Hacer foto") }
+                Button(onClick = { camera.launch(photoUri) }) { Text("Hacer foto") }
                 OutlinedButton(onClick = { gallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }) {
                     Text("Elegir de la galería")
                 }
@@ -129,6 +130,13 @@ fun SearchScreen(container: AppContainer) {
     linksFor?.let { tags ->
         StoreLinksDialog(tags, settings?.lastLocation?.takeIf { settings?.locationEnabled == true }) { linksFor = null }
     }
+}
+
+/** Archivo en la caché de la app donde la cámara guarda la foto a resolución completa. */
+private fun newPhotoUri(context: android.content.Context): android.net.Uri {
+    val dir = java.io.File(context.cacheDir, "photos").apply { mkdirs() }
+    val file = java.io.File(dir, "search.jpg")
+    return androidx.core.content.FileProvider.getUriForFile(context, "${context.packageName}.files", file)
 }
 
 @Composable

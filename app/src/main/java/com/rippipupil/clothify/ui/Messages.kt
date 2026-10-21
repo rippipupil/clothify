@@ -16,13 +16,11 @@ fun FailureReason.message(): String = when (this) {
 fun sourceWarning(failures: Map<Source, SourceFailure>): String? {
     val relevant = failures.filterValues { it != SourceFailure.DISABLED }
     if (relevant.isEmpty()) return null
-    return relevant.entries.joinToString(" · ") { (source, reason) ->
-        when (reason) {
-            SourceFailure.BUDGET_EXHAUSTED -> "${source.label}: búsquedas de hoy agotadas"
-            SourceFailure.NO_INTERNET -> "Sin conexión"
-            else -> "${source.label} no responde ahora"
-        }
-    }.let { if (failures.values.all { it == SourceFailure.NO_INTERNET }) "Sin conexión" else it }
+    val offline = if (relevant.values.any { it == SourceFailure.NO_INTERNET }) listOf("Sin conexión") else emptyList()
+    val others = relevant.filterValues { it != SourceFailure.NO_INTERNET }.map { (source, reason) ->
+        if (reason == SourceFailure.BUDGET_EXHAUSTED) "${source.label}: búsquedas de hoy agotadas" else "${source.label} no responde ahora"
+    }
+    return (offline + others).joinToString(" · ")
 }
 
 fun formatPrice(eur: Double): String =
