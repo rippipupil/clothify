@@ -19,7 +19,10 @@ import com.rippipupil.clothify.data.sources.Throttle
 import com.rippipupil.clothify.data.sources.VintedSource
 import com.rippipupil.clothify.data.sources.WallapopSource
 import com.rippipupil.clothify.data.sources.WebViewVintedCookieProvider
+import com.rippipupil.clothify.data.style.ClipStyleAnalyzer
+import com.rippipupil.clothify.data.style.FallbackStyleAnalyzer
 import com.rippipupil.clothify.data.style.GeminiStyleAnalyzer
+import com.rippipupil.clothify.data.style.OnnxClipEmbedder
 import com.rippipupil.clothify.data.style.StyleAnalyzer
 import com.rippipupil.clothify.domain.QueryPlanner
 import com.rippipupil.clothify.domain.Recommender
@@ -49,8 +52,15 @@ class AppContainer(context: Context) {
     val location = LocationProvider(appContext)
     val recommender = Recommender(Random.Default)
 
-    val styleAnalyzer: StyleAnalyzer =
-        GeminiStyleAnalyzer(http, BuildConfig.GEMINI_API_KEY, BuildConfig.GEMINI_MODEL)
+    /** CLIP en el móvil (si el modelo viene en el APK). */
+    val clipEmbedder = OnnxClipEmbedder(appContext)
+    private val tagEmbeddings by lazy { OnnxClipEmbedder.loadTagEmbeddings(appContext) }
+
+    /** Gemini primero; si falla o no hay clave, análisis en el móvil con CLIP. */
+    val styleAnalyzer: StyleAnalyzer = FallbackStyleAnalyzer(
+        primary = GeminiStyleAnalyzer(http, BuildConfig.GEMINI_API_KEY, BuildConfig.GEMINI_MODEL),
+        fallback = ClipStyleAnalyzer(clipEmbedder) { tagEmbeddings },
+    )
 
     val aliExpress = AliExpressClient(
         http,

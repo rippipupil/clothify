@@ -9,6 +9,7 @@ fun FailureReason.message(): String = when (this) {
     FailureReason.QUOTA_EXCEEDED -> "Has agotado el análisis gratuito de hoy. Vuelve mañana o elige las etiquetas a mano."
     FailureReason.NO_TAGS -> "No he reconocido ropa en la foto. Elige las etiquetas a mano."
     FailureReason.MISSING_KEY -> "Falta la clave de Gemini: elige las etiquetas a mano (mira el README)."
+    FailureReason.MODEL_UNAVAILABLE -> "El análisis en el móvil no está disponible en esta versión. Elige las etiquetas a mano."
     FailureReason.UNKNOWN -> "Algo ha fallado al analizar la foto. Reintenta o elige las etiquetas a mano."
 }
 

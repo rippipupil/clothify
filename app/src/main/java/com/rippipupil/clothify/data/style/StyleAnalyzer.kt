@@ -8,8 +8,9 @@ interface StyleAnalyzer {
 }
 
 sealed interface StyleResult {
-    data class Success(val tagIds: List<String>) : StyleResult
+    /** [onDevice]: analizada en el móvil con CLIP (sin internet) en vez de con Gemini. */
+    data class Success(val tagIds: List<String>, val onDevice: Boolean = false) : StyleResult
     data class Failure(val reason: FailureReason) : StyleResult
 }
 
-enum class FailureReason { NO_INTERNET, QUOTA_EXCEEDED, NO_TAGS, MISSING_KEY, UNKNOWN }
+enum class FailureReason { NO_INTERNET, QUOTA_EXCEEDED, NO_TAGS, MISSING_KEY, MODEL_UNAVAILABLE, UNKNOWN }
