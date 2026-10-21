@@ -12,4 +12,7 @@ data class Tag(
     /** Palabras o frases (sin tildes, minúsculas) que identifican la etiqueta en un título. */
     val synonyms: List<String>,
     val sizeKind: SizeKind? = null,
-)
+) {
+    /** Palabra que se usa al construir búsquedas ("cuero / piel" → "cuero"). */
+    val searchTerm: String get() = label.substringBefore(" / ")
+}
