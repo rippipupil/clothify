@@ -1,0 +1,32 @@
+{
+  "items": [
+    {
+      "id": 5012345678,
+      "title": "Sudadera Carhartt oversize",
+      "price": {"amount": "25.0", "currency_code": "EUR"},
+      "total_item_price": {"amount": "27.45", "currency_code": "EUR"},
+      "brand_title": "Carhartt",
+      "size_title": "L / 40 / 12",
+      "url": "https://www.vinted.es/items/5012345678-sudadera-carhartt-oversize",
+      "photo": {"url": "https://images1.vinted.net/t/01_abc/f800/5012345678.jpeg"}
+    },
+    {
+      "id": 5012345679,
+      "title": "Hoodie negro",
+      "price": "12.0",
+      "currency": "EUR",
+      "size_title": "M",
+      "url": "https://www.vinted.es/items/5012345679-hoodie-negro",
+      "photo": {"url": "https://images1.vinted.net/t/02_def/f800/5012345679.jpeg"}
+    },
+    {
+      "id": 5012345680,
+      "title": "Sudadera sin foto",
+      "price": {"amount": "9.0", "currency_code": "EUR"},
+      "size_title": "L",
+      "url": "https://www.vinted.es/items/5012345680-sudadera-sin-foto",
+      "photo": null
+    }
+  ],
+  "pagination": {"current_page": 1, "total_pages": 10}
+}
