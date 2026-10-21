@@ -1,0 +1,37 @@
+name: Generate signing key
+
+# Ejecútalo UNA sola vez (Actions → Generate signing key → Run workflow) con el repositorio en privado.
+# Crea una clave de firma y la deja en un artefacto que caduca en 1 día; copia sus valores a los
+# secretos KEYSTORE_BASE64, KEYSTORE_PASSWORD, KEY_ALIAS y KEY_PASSWORD y borra el artefacto.
+on:
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Create keystore
+        run: |
+          PASSWORD=$(openssl rand -hex 16)
+          keytool -genkeypair -keystore release.jks -storepass "$PASSWORD" -keypass "$PASSWORD" \
+            -alias clothify -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Clothify, C=ES"
+          {
+            echo "KEYSTORE_BASE64:"
+            base64 -w0 release.jks
+            echo
+            echo
+            echo "KEYSTORE_PASSWORD: $PASSWORD"
+            echo "KEY_ALIAS: clothify"
+            echo "KEY_PASSWORD: $PASSWORD"
+          } > signing-secrets.txt
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: signing-secrets
+          path: signing-secrets.txt
+          retention-days: 1
