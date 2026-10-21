@@ -1,0 +1,15 @@
+{
+  "aliexpress_affiliate_productdetail_get_response": {
+    "resp_result": {
+      "resp_code": 200,
+      "result": {
+        "current_record_count": 1,
+        "products": {
+          "product": [
+            {"product_id": 1005006000000001, "target_sale_price": "15.10", "product_title": "Sudadera oversize"}
+          ]
+        }
+      }
+    }
+  }
+}

@@ -9,6 +9,8 @@ import com.rippipupil.clothify.data.pool.ProfileRepository
 import com.rippipupil.clothify.data.pool.SettingsBudgetGate
 import com.rippipupil.clothify.data.settings.SettingsRepository
 import com.rippipupil.clothify.data.settings.settingsDataStore
+import com.rippipupil.clothify.data.sources.AliExpressClient
+import com.rippipupil.clothify.data.sources.AliExpressSource
 import com.rippipupil.clothify.data.sources.GoogleShoppingSource
 import com.rippipupil.clothify.data.sources.Throttle
 import com.rippipupil.clothify.data.sources.VintedSource
@@ -47,12 +49,20 @@ class AppContainer(context: Context) {
     val styleAnalyzer: StyleAnalyzer =
         GeminiStyleAnalyzer(http, BuildConfig.GEMINI_API_KEY, BuildConfig.GEMINI_MODEL)
 
+    val aliExpress = AliExpressClient(
+        http,
+        BuildConfig.ALIEXPRESS_APP_KEY,
+        BuildConfig.ALIEXPRESS_APP_SECRET,
+        BuildConfig.ALIEXPRESS_TRACKING_ID,
+    )
+
     val pool = ProductPoolRepository(
         db = db,
         sources = listOf(
             WallapopSource(http, Throttle(UNOFFICIAL_INTERVAL_MS)),
             VintedSource(http, WebViewVintedCookieProvider(appContext), Throttle(UNOFFICIAL_INTERVAL_MS)),
             GoogleShoppingSource(http, BuildConfig.SERPAPI_KEY, SettingsBudgetGate(settings)),
+            AliExpressSource(aliExpress, Throttle(OFFICIAL_INTERVAL_MS)),
         ),
         planner = QueryPlanner(Random.Default),
         profile = profile,
@@ -61,5 +71,6 @@ class AppContainer(context: Context) {
 
     private companion object {
         const val UNOFFICIAL_INTERVAL_MS = 3_000L
+        const val OFFICIAL_INTERVAL_MS = 1_000L
     }
 }

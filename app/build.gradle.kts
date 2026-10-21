@@ -32,6 +32,9 @@ android {
 
         buildConfigField("String", "GEMINI_API_KEY", "\"${secret("GEMINI_API_KEY")}\"")
         buildConfigField("String", "SERPAPI_KEY", "\"${secret("SERPAPI_KEY")}\"")
+        buildConfigField("String", "ALIEXPRESS_APP_KEY", "\"${secret("ALIEXPRESS_APP_KEY")}\"")
+        buildConfigField("String", "ALIEXPRESS_APP_SECRET", "\"${secret("ALIEXPRESS_APP_SECRET")}\"")
+        buildConfigField("String", "ALIEXPRESS_TRACKING_ID", "\"${secret("ALIEXPRESS_TRACKING_ID")}\"")
         buildConfigField("String", "GEMINI_MODEL", "\"gemini-flash-latest\"")
     }
 

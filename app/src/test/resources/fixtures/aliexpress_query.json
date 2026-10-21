@@ -1,0 +1,40 @@
+{
+  "aliexpress_affiliate_product_query_response": {
+    "resp_result": {
+      "resp_code": 200,
+      "resp_msg": "Call succeeds",
+      "result": {
+        "current_page_no": 1,
+        "current_record_count": 3,
+        "products": {
+          "product": [
+            {
+              "product_id": 1005006000000001,
+              "product_title": "Sudadera oversize con capucha para hombre, color negro",
+              "target_sale_price": "18.45",
+              "target_sale_price_currency": "EUR",
+              "product_main_image_url": "https://ae01.alicdn.com/kf/S1.jpg",
+              "promotion_link": "https://s.click.aliexpress.com/e/_abc",
+              "product_detail_url": "https://www.aliexpress.com/item/1005006000000001.html"
+            },
+            {
+              "product_id": 1005006000000002,
+              "product_title": "Sudadera vintage lavada",
+              "target_sale_price": "75.00",
+              "target_sale_price_currency": "EUR",
+              "product_main_image_url": "https://ae01.alicdn.com/kf/S2.jpg",
+              "product_detail_url": "https://www.aliexpress.com/item/1005006000000002.html"
+            },
+            {
+              "product_id": 1005006000000003,
+              "product_title": "Sudadera sin foto",
+              "target_sale_price": "9.99",
+              "product_detail_url": "https://www.aliexpress.com/item/1005006000000003.html"
+            }
+          ]
+        }
+      }
+    },
+    "request_id": "abc"
+  }
+}

@@ -4,6 +4,7 @@ enum class Source(val label: String) {
     WALLAPOP("Wallapop"),
     VINTED("Vinted"),
     GOOGLE_SHOPPING("Google Shopping"),
+    ALIEXPRESS("AliExpress"),
 }
 
 data class Product(
