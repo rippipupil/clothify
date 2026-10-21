@@ -102,4 +102,17 @@ class VintedSourceTest {
         assertEquals(SourceResult.Failed(SourceFailure.BLOCKED), source(noCookies).search(query()))
         assertEquals(0, server.requestCount)
     }
+
+    @Test
+    fun missingCookieDisablesForAnHourWithoutRetryingTheWebView() = runTest {
+        var attempts = 0
+        val noCookies = object : CookieProvider {
+            override suspend fun cookies(forceRefresh: Boolean): String? = null.also { attempts++ }
+        }
+        val vinted = source(noCookies)
+        vinted.search(query())
+        val afterFirst = attempts
+        vinted.search(query())
+        assertEquals(afterFirst, attempts)
+    }
 }

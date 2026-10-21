@@ -35,22 +35,25 @@ class VintedSource(
             .build()
         return safeFetch {
             var response = request(url.toString(), cookies.cookies(forceRefresh = false))
-                ?: return@safeFetch SourceResult.Failed(SourceFailure.BLOCKED)
+                ?: return@safeFetch blocked()
             if (response.code == 401 || response.code == 403) {
                 response = request(url.toString(), cookies.cookies(forceRefresh = true))
-                    ?: return@safeFetch SourceResult.Failed(SourceFailure.BLOCKED)
+                    ?: return@safeFetch blocked()
             }
             when (response.code) {
                 200 -> VintedParser.parse(response.body, query, now())
                     ?.let { SourceResult.Ok(it) }
                     ?: SourceResult.Failed(SourceFailure.BAD_RESPONSE)
-                401, 403, 429 -> {
-                    blockedUntil = now() + BLOCK_MILLIS
-                    SourceResult.Failed(SourceFailure.BLOCKED)
-                }
+                401, 403, 429 -> blocked()
                 else -> SourceResult.Failed(SourceFailure.BAD_RESPONSE)
             }
         }
+    }
+
+    /** Deja Vinted en pausa una hora para no repetir peticiones (ni el WebView) que van a fallar. */
+    private fun blocked(): SourceResult {
+        blockedUntil = now() + BLOCK_MILLIS
+        return SourceResult.Failed(SourceFailure.BLOCKED)
     }
 
     private suspend fun request(url: String, cookie: String?): HttpResponse? {

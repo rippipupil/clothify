@@ -43,6 +43,13 @@ class GoogleShoppingSourceTest {
     }
 
     @Test
+    fun missingLinkFallsBackToGoogleShoppingSearch() {
+        val json = """{"shopping_results":[{"title":"Polo azul","extracted_price":15.0,"source":"Zara","thumbnail":"https://t/1"}]}"""
+        val product = GoogleShoppingParser.parse(json, query(), 0)!!.single()
+        assertEquals("https://www.google.com/search?tbm=shop&q=Polo+azul+Zara", product.productUrl)
+    }
+
+    @Test
     fun garbageJsonGivesNull() = assertNull(GoogleShoppingParser.parse("<html>", query(), 0))
 
     @Test
