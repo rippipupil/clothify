@@ -7,6 +7,7 @@ import com.rippipupil.clothify.data.pool.ProductPoolRepository
 import com.rippipupil.clothify.data.settings.SettingsRepository
 import com.rippipupil.clothify.data.style.StyleAnalyzer
 import com.rippipupil.clothify.data.style.StyleResult
+import com.rippipupil.clothify.data.style.VisualRanker
 import com.rippipupil.clothify.domain.Product
 import com.rippipupil.clothify.domain.SearchBudget
 import com.rippipupil.clothify.domain.SearchQuery
@@ -28,15 +29,22 @@ import java.time.LocalDate
 sealed interface SearchUiState {
     data object Idle : SearchUiState
     data object Analyzing : SearchUiState
-    data class Tags(val tagIds: Set<String>, val error: String?, val canRetry: Boolean) : SearchUiState
+    data class Tags(val tagIds: Set<String>, val error: String?, val canRetry: Boolean, val onDevice: Boolean = false) : SearchUiState
     data class Searching(val tagIds: Set<String>) : SearchUiState
-    data class Results(val tagIds: Set<String>, val products: List<Product>, val warning: String?) : SearchUiState
+    /** [visual]: ordenados por parecido visual con la foto (si no, por etiquetas en común). */
+    data class Results(
+        val tagIds: Set<String>,
+        val products: List<Product>,
+        val warning: String?,
+        val visual: Boolean = false,
+    ) : SearchUiState
 }
 
 class SearchViewModel(
     private val analyzer: StyleAnalyzer,
     private val pool: ProductPoolRepository,
     private val settings: SettingsRepository,
+    private val visualRanker: VisualRanker? = null,
 ) : ViewModel() {
     private val _state = MutableStateFlow<SearchUiState>(SearchUiState.Idle)
     val state: StateFlow<SearchUiState> = _state
@@ -79,7 +87,11 @@ class SearchViewModel(
             location = s.lastLocation.takeIf { s.locationEnabled },
         )
         val (products, failures) = pool.searchAll(query)
-        _state.value = SearchUiState.Results(tags, Similarity.rank(tags, products), sourceWarning(failures))
+        val byTags = SearchUiState.Results(tags, Similarity.rank(tags, products), sourceWarning(failures))
+        _state.value = byTags
+        val photo = lastPhoto ?: return@launch
+        val visual = visualRanker?.rank(photo, byTags.products) ?: return@launch
+        if (_state.value == byTags) _state.value = byTags.copy(products = visual, visual = true)
     }
 
     fun backToTags() {
@@ -94,7 +106,7 @@ class SearchViewModel(
     private fun analyze(photo: Bitmap): Job = viewModelScope.launch {
         _state.value = SearchUiState.Analyzing
         _state.value = when (val result = analyzer.analyze(photo)) {
-            is StyleResult.Success -> SearchUiState.Tags(result.tagIds.toSet(), error = null, canRetry = true)
+            is StyleResult.Success -> SearchUiState.Tags(result.tagIds.toSet(), error = null, canRetry = true, onDevice = result.onDevice)
             is StyleResult.Failure -> SearchUiState.Tags(emptySet(), error = result.reason.message(), canRetry = true)
         }
     }

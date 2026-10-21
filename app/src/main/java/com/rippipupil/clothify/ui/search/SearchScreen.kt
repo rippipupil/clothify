@@ -46,7 +46,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SearchScreen(container: AppContainer) {
-    val vm = containerViewModel { SearchViewModel(container.styleAnalyzer, container.pool, container.settings) }
+    val vm = containerViewModel { SearchViewModel(container.styleAnalyzer, container.pool, container.settings, container.visualRanker) }
     val state by vm.state.collectAsState()
     val left by vm.shoppingSearchesLeft.collectAsState()
     val settings by container.settings.settings.collectAsState(initial = null)
@@ -85,6 +85,7 @@ fun SearchScreen(container: AppContainer) {
             is SearchUiState.Searching -> Loading("Buscando en Wallapop, Vinted y Google Shopping…")
             is SearchUiState.Tags -> Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text("Ajusta las etiquetas", style = MaterialTheme.typography.titleLarge)
+                if (s.onDevice) Text("Analizada en el móvil, sin internet", style = MaterialTheme.typography.bodySmall)
                 s.error?.let { Text(it, color = MaterialTheme.colorScheme.error) }
                 if (s.error != null && s.canRetry) OutlinedButton(onClick = { vm.retry() }) { Text("Reintentar") }
                 TagPicker(s.tagIds, vm::toggleTag, Modifier.weight(1f).verticalScroll(rememberScrollState()))
@@ -106,6 +107,10 @@ fun SearchScreen(container: AppContainer) {
                 item(span = { GridItemSpan(maxLineSpan) }) {
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         TagChips(s.tagIds, max = 8)
+                        Text(
+                            if (s.visual) "Ordenado por parecido visual con tu foto" else "Ordenado por etiquetas en común",
+                            style = MaterialTheme.typography.bodySmall,
+                        )
                         s.warning?.let { Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall) }
                         if (s.products.isEmpty()) Text("No he encontrado prendas parecidas. Prueba a quitar alguna etiqueta.")
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {

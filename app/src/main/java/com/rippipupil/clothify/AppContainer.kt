@@ -24,6 +24,10 @@ import com.rippipupil.clothify.data.style.FallbackStyleAnalyzer
 import com.rippipupil.clothify.data.style.GeminiStyleAnalyzer
 import com.rippipupil.clothify.data.style.OnnxClipEmbedder
 import com.rippipupil.clothify.data.style.StyleAnalyzer
+import com.rippipupil.clothify.data.style.VisualRanker
+import android.graphics.BitmapFactory
+import kotlinx.coroutines.withContext
+import okhttp3.Request
 import com.rippipupil.clothify.domain.QueryPlanner
 import com.rippipupil.clothify.domain.Recommender
 import kotlinx.coroutines.CoroutineScope
@@ -61,6 +65,19 @@ class AppContainer(context: Context) {
         primary = GeminiStyleAnalyzer(http, BuildConfig.GEMINI_API_KEY, BuildConfig.GEMINI_MODEL),
         fallback = ClipStyleAnalyzer(clipEmbedder) { tagEmbeddings },
     )
+
+    /** Reordena "Buscar con foto" por parecido visual (solo si el modelo CLIP viene en el APK). */
+    val visualRanker = VisualRanker(clipEmbedder) { url -> downloadThumbnail(url) }
+
+    private suspend fun downloadThumbnail(url: String) = withContext(Dispatchers.IO) {
+        runCatching {
+            http.newCall(Request.Builder().url(url).build()).execute().use { response ->
+                val bytes = response.body?.bytes() ?: return@use null
+                val options = BitmapFactory.Options().apply { inSampleSize = 2 }
+                BitmapFactory.decodeByteArray(bytes, 0, bytes.size, options)
+            }
+        }.getOrNull()
+    }
 
     val aliExpress = AliExpressClient(
         http,

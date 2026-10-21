@@ -57,10 +57,34 @@ class SearchViewModelTest {
     @After
     fun tearDown() = db.close()
 
-    private fun vm(analyzer: FakeAnalyzer): SearchViewModel {
+    private fun vm(analyzer: FakeAnalyzer, ranker: com.rippipupil.clothify.data.style.VisualRanker? = null): SearchViewModel {
         val settings = testSettings(tmp)
         val pool = ProductPoolRepository(db, listOf(source), QueryPlanner(Random(1)), ProfileRepository(db), settings)
-        return SearchViewModel(analyzer, pool, settings)
+        return SearchViewModel(analyzer, pool, settings, ranker)
+    }
+
+    @Test
+    fun onDeviceAnalysisIsFlagged() = runTest {
+        val vm = vm(FakeAnalyzer(StyleResult.Success(listOf("sudadera"), onDevice = true)))
+        vm.onPhoto(bitmap()).join()
+        assertTrue((vm.state.value as SearchUiState.Tags).onDevice)
+    }
+
+    @Test
+    fun resultsAreReorderedVisuallyWhenPossible() = runTest {
+        val embedder = object : com.rippipupil.clothify.data.style.ImageEmbedder {
+            override val available = true
+            override suspend fun embed(bitmap: android.graphics.Bitmap) = floatArrayOf(1f, 0f)
+        }
+        val ranker = com.rippipupil.clothify.data.style.VisualRanker(embedder) { url ->
+            if (url.contains("half")) bitmap() else null
+        }
+        val vm = vm(FakeAnalyzer(StyleResult.Success(listOf("sudadera", "negro"))), ranker)
+        vm.onPhoto(bitmap()).join()
+        vm.search().join()
+        val results = vm.state.value as SearchUiState.Results
+        assertTrue(results.visual)
+        assertEquals(listOf("half", "full"), results.products.map { it.id })
     }
 
     @Test
