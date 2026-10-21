@@ -36,6 +36,8 @@ import com.rippipupil.clothify.domain.LatLng
 import com.rippipupil.clothify.domain.StoreLinkBuilder
 import com.rippipupil.clothify.data.pool.BasketItem
 import com.rippipupil.clothify.ui.components.ProductImage
+import com.rippipupil.clothify.ui.components.rememberPriceAlertsSetter
+import com.rippipupil.clothify.domain.Source
 import com.rippipupil.clothify.ui.components.TagChips
 import com.rippipupil.clothify.ui.components.details
 import com.rippipupil.clothify.ui.containerViewModel
@@ -48,6 +50,8 @@ fun BasketScreen(container: AppContainer) {
     val items by vm.items.collectAsState()
     val settings by container.settings.settings.collectAsState(initial = null)
     val location = settings?.lastLocation?.takeIf { settings?.locationEnabled == true }
+    val setAlerts = rememberPriceAlertsSetter(container)
+    val canCheck: (Source) -> Boolean = container.priceChecker::canCheck
     if (items.isEmpty()) {
         Box(Modifier.fillMaxSize().padding(24.dp), contentAlignment = Alignment.Center) {
             Text("Tu cesta está vacía. Pulsa 🛒 en una tarjeta para guardarla aquí.")
@@ -56,12 +60,22 @@ fun BasketScreen(container: AppContainer) {
     }
     LazyColumn(Modifier.fillMaxSize().padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { Text("Cesta", style = MaterialTheme.typography.headlineSmall, modifier = Modifier.padding(top = 16.dp)) }
-        items(items, key = { it.product.id }) { item -> BasketRow(item, location, onRemove = { vm.remove(item.product.id) }) }
+        if (settings?.priceAlertsEnabled == false && items.any { canCheck(it.product.source) }) {
+            item {
+                Card {
+                    Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Text("¿Te aviso si baja de precio o se vende algo de tu cesta?", Modifier.weight(1f))
+                        Button(onClick = { setAlerts(true) }) { Text("Avisarme") }
+                    }
+                }
+            }
+        }
+        items(items, key = { it.product.id }) { item -> BasketRow(item, location, canCheck, onRemove = { vm.remove(item.product.id) }) }
     }
 }
 
 @Composable
-private fun BasketRow(item: BasketItem, location: LatLng?, onRemove: () -> Unit) {
+private fun BasketRow(item: BasketItem, location: LatLng?, canCheck: (Source) -> Boolean, onRemove: () -> Unit) {
     val context = LocalContext.current
     val open = { url: String ->
         if (!openUrl(context, url)) Toast.makeText(context, "No se pudo abrir el enlace", Toast.LENGTH_SHORT).show()
@@ -72,10 +86,17 @@ private fun BasketRow(item: BasketItem, location: LatLng?, onRemove: () -> Unit)
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 ProductImage(product.imageUrl, Modifier.size(96.dp))
                 Column(Modifier.weight(1f)) {
-                    Text(formatPrice(product.priceEur), fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+                    Text(formatPrice(BasketViewModel.displayedPrice(item)), fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+                    BasketViewModel.priceLabel(item, canCheck)?.let { label ->
+                        Text(
+                            label,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = if (item.unavailable) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+                        )
+                    }
                     Text(product.title, maxLines = 2, overflow = TextOverflow.Ellipsis)
                     Text(product.details(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    if (BasketViewModel.isStale(item)) {
+                    if (BasketViewModel.isStale(item) && !canCheck(product.source)) {
                         Text("Puede que ya no esté disponible", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
                     }
                 }

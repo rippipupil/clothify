@@ -38,6 +38,7 @@ import com.rippipupil.clothify.domain.ProfileScorer
 import com.rippipupil.clothify.domain.SearchBudget
 import com.rippipupil.clothify.ui.components.SizesAndPrice
 import com.rippipupil.clothify.ui.components.loadBitmap
+import com.rippipupil.clothify.ui.components.rememberPriceAlertsSetter
 import com.rippipupil.clothify.ui.containerViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -62,6 +63,7 @@ fun ProfileScreen(container: AppContainer) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var confirmClear by remember { mutableStateOf(false) }
+    val setAlerts = rememberPriceAlertsSetter(container)
 
     val locationPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         vm.setLocationEnabled(granted)
@@ -120,6 +122,14 @@ fun ProfileScreen(container: AppContainer) {
                     }
                 },
             )
+        }
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f)) {
+                Text("Avisarme si baja de precio", style = MaterialTheme.typography.titleSmall)
+                Text("Revisa tu cesta cada 12 h (Wallapop y AliExpress)", style = MaterialTheme.typography.bodySmall)
+            }
+            Switch(checked = s.priceAlertsEnabled, onCheckedChange = setAlerts)
         }
 
         val (today, month) = SearchBudget.remaining(s.budget, LocalDate.now())

@@ -4,12 +4,15 @@ import android.content.Context
 import com.rippipupil.clothify.data.local.ClothifyDatabase
 import com.rippipupil.clothify.data.location.LocationProvider
 import com.rippipupil.clothify.data.pool.BasketRepository
+import com.rippipupil.clothify.data.pool.PriceChecker
 import com.rippipupil.clothify.data.pool.ProductPoolRepository
 import com.rippipupil.clothify.data.pool.ProfileRepository
 import com.rippipupil.clothify.data.pool.SettingsBudgetGate
 import com.rippipupil.clothify.data.settings.SettingsRepository
 import com.rippipupil.clothify.data.settings.settingsDataStore
 import com.rippipupil.clothify.data.sources.AliExpressClient
+import com.rippipupil.clothify.data.sources.AliExpressPriceFetcher
+import com.rippipupil.clothify.data.sources.WallapopPriceFetcher
 import com.rippipupil.clothify.data.sources.AliExpressSource
 import com.rippipupil.clothify.data.sources.GoogleShoppingSource
 import com.rippipupil.clothify.data.sources.Throttle
@@ -54,6 +57,11 @@ class AppContainer(context: Context) {
         BuildConfig.ALIEXPRESS_APP_KEY,
         BuildConfig.ALIEXPRESS_APP_SECRET,
         BuildConfig.ALIEXPRESS_TRACKING_ID,
+    )
+
+    val priceChecker = PriceChecker(
+        basket,
+        listOf(WallapopPriceFetcher(http, Throttle(UNOFFICIAL_INTERVAL_MS)), AliExpressPriceFetcher(aliExpress)),
     )
 
     val pool = ProductPoolRepository(

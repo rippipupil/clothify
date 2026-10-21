@@ -81,11 +81,12 @@ class PersistenceTest {
         val settings = SettingsRepository(store)
         assertEquals(60.0, settings.settings.first().maxPriceEur, 1e-9)
         val budget = BudgetState("2026-10-21", 2, "2026-10", 9)
-        settings.update { it.copy(maxPriceEur = 45.0, budget = budget, sizes = UserSizes(top = "L"), onboardingDone = true) }
+        settings.update { it.copy(maxPriceEur = 45.0, budget = budget, sizes = UserSizes(top = "L"), onboardingDone = true, priceAlertsEnabled = true) }
         val read = settings.settings.first()
         assertEquals(45.0, read.maxPriceEur, 1e-9)
         assertEquals(budget, read.budget)
         assertEquals("L", read.sizes.top)
         assertTrue(read.onboardingDone)
+        assertTrue(read.priceAlertsEnabled)
     }
 }

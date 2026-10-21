@@ -24,6 +24,7 @@ data class UserSettings(
     val locationEnabled: Boolean = false,
     val lastLocation: LatLng? = null,
     val budget: BudgetState = BudgetState(),
+    val priceAlertsEnabled: Boolean = false,
 ) {
     companion object {
         const val DEFAULT_MAX_PRICE = 60.0
@@ -63,6 +64,7 @@ class SettingsRepository(private val store: DataStore<Preferences>) {
                 month = this[BUDGET_MONTH] ?: "",
                 monthCount = this[BUDGET_MONTH_COUNT] ?: 0,
             ),
+            priceAlertsEnabled = this[PRICE_ALERTS] ?: false,
         )
     }
 
@@ -79,6 +81,7 @@ class SettingsRepository(private val store: DataStore<Preferences>) {
         this[BUDGET_DAY_COUNT] = s.budget.dayCount
         this[BUDGET_MONTH] = s.budget.month
         this[BUDGET_MONTH_COUNT] = s.budget.monthCount
+        this[PRICE_ALERTS] = s.priceAlertsEnabled
     }
 
     private fun <T> MutablePreferences.setOrRemove(key: Preferences.Key<T>, value: T?) {
@@ -98,5 +101,6 @@ class SettingsRepository(private val store: DataStore<Preferences>) {
         val BUDGET_DAY_COUNT = intPreferencesKey("budget_day_count")
         val BUDGET_MONTH = stringPreferencesKey("budget_month")
         val BUDGET_MONTH_COUNT = intPreferencesKey("budget_month_count")
+        val PRICE_ALERTS = booleanPreferencesKey("price_alerts")
     }
 }
