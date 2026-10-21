@@ -1,0 +1,362 @@
+{
+ "data": {
+  "section": {
+   "type": "organic_search_results",
+   "payload": {
+    "items": [
+     {
+      "id": "pzpk4v9509j3",
+      "title": "Sudadera Nike sin capucha marrón",
+      "description": "Sudadera marrón de manga larga y sin capucha con el logo de Nike bordado en el p",
+      "price": {
+       "amount": 27.0,
+       "currency": "EUR"
+      },
+      "images": [
+       {
+        "id": "pj9keyqgev2z",
+        "average_color": "13C1AC",
+        "urls": {
+         "small": "https://cdn.wallapop.com/images/10420/lg/ka/__/c10420p1297609802/i6708558761.jpg?pictureSize=W320",
+         "medium": "https://cdn.wallapop.com/images/10420/lg/ka/__/c10420p1297609802/i6708558761.jpg?pictureSize=W640",
+         "big": "https://cdn.wallapop.com/images/10420/lg/ka/__/c10420p1297609802/i6708558761.jpg?pictureSize=W800"
+        }
+       }
+      ],
+      "location": {
+       "latitude": 40.409988005158986,
+       "longitude": -3.696865017691748,
+       "postal_code": "28001",
+       "city": "Madrid",
+       "region": "Comunidad de Madrid",
+       "region2": "Madrid",
+       "country_code": "ES"
+      },
+      "web_slug": "sudadera-nike-sin-capucha-marron-1297609802",
+      "taxonomy": [
+       {
+        "id": 12465,
+        "name": "Fashion & accessories",
+        "icon": "t-shirt"
+       },
+       {
+        "id": 11003,
+        "name": "Men",
+        "icon": null
+       },
+       {
+        "id": 11031,
+        "name": "Clothes",
+        "icon": null
+       },
+       {
+        "id": 11036,
+        "name": "Jumpers & sweaters",
+        "icon": null
+       },
+       {
+        "id": 9893,
+        "name": "Hoodies & sweatshirts",
+        "icon": null
+       }
+      ],
+      "reserved": {
+       "flag": false
+      }
+     },
+     {
+      "id": "qzmmk0pg7lzv",
+      "title": "Sudadera Romwe oversize morada y amarilla",
+      "description": "Sudadera con capucha de la marca Romwe, con un diseño oversize y una combinación",
+      "price": {
+       "amount": 5.0,
+       "currency": "EUR"
+      },
+      "images": [
+       {
+        "id": "8j3mgv9ml5y6",
+        "average_color": "13C1AC",
+        "urls": {
+         "small": "https://cdn.wallapop.com/images/10420/le/n4/__/c10420p1294382780/i6693602882.jpg?pictureSize=W320",
+         "medium": "https://cdn.wallapop.com/images/10420/le/n4/__/c10420p1294382780/i6693602882.jpg?pictureSize=W640",
+         "big": "https://cdn.wallapop.com/images/10420/le/n4/__/c10420p1294382780/i6693602882.jpg?pictureSize=W800"
+        }
+       }
+      ],
+      "location": {
+       "latitude": 40.4137311276334,
+       "longitude": -3.695006768172114,
+       "postal_code": "28070",
+       "city": "Madrid",
+       "region": "Comunidad de Madrid",
+       "region2": "Madrid",
+       "country_code": "ES"
+      },
+      "web_slug": "sudadera-romwe-oversize-morada-y-amarilla-1294382780",
+      "taxonomy": [
+       {
+        "id": 12465,
+        "name": "Fashion & accessories",
+        "icon": "t-shirt"
+       },
+       {
+        "id": 11003,
+        "name": "Men",
+        "icon": null
+       },
+       {
+        "id": 11031,
+        "name": "Clothes",
+        "icon": null
+       },
+       {
+        "id": 11036,
+        "name": "Jumpers & sweaters",
+        "icon": null
+       },
+       {
+        "id": 9893,
+        "name": "Hoodies & sweatshirts",
+        "icon": null
+       }
+      ],
+      "reserved": {
+       "flag": false
+      }
+     },
+     {
+      "id": "mzn35r03k7jn",
+      "title": "Sudadera GAP Forro Polar Azul Marino - Talla M",
+      "description": "GAP Polar Fleece Hoodie Sweatshirt Blue Vintage 90s Y2K Old Money Oversize Style",
+      "price": {
+       "amount": 20.0,
+       "currency": "EUR"
+      },
+      "images": [
+       {
+        "id": "nz0gd1ek21rj",
+        "average_color": "13C1AC",
+        "urls": {
+         "small": "https://cdn.wallapop.com/images/10420/lp/wi/__/c10420p1313297701/i6798676927.jpg?pictureSize=W320",
+         "medium": "https://cdn.wallapop.com/images/10420/lp/wi/__/c10420p1313297701/i6798676927.jpg?pictureSize=W640",
+         "big": "https://cdn.wallapop.com/images/10420/lp/wi/__/c10420p1313297701/i6798676927.jpg?pictureSize=W800"
+        }
+       }
+      ],
+      "location": {
+       "latitude": 40.413074256413054,
+       "longitude": -3.696642460882828,
+       "postal_code": "28070",
+       "city": "Madrid",
+       "region": "Comunidad de Madrid",
+       "region2": "Madrid",
+       "country_code": "ES"
+      },
+      "web_slug": "sudadera-gap-forro-polar-azul-marino-talla-m-1313297701",
+      "taxonomy": [
+       {
+        "id": 12465,
+        "name": "Fashion & accessories",
+        "icon": "t-shirt"
+       },
+       {
+        "id": 11003,
+        "name": "Men",
+        "icon": null
+       },
+       {
+        "id": 11031,
+        "name": "Clothes",
+        "icon": null
+       },
+       {
+        "id": 11036,
+        "name": "Jumpers & sweaters",
+        "icon": null
+       },
+       {
+        "id": 9893,
+        "name": "Hoodies & sweatshirts",
+        "icon": null
+       }
+      ],
+      "reserved": {
+       "flag": false
+      }
+     },
+     {
+      "id": "reserved1",
+      "title": "Sudadera reservada",
+      "description": "Sudadera marrón de manga larga y sin capucha con el logo de Nike bordado en el p",
+      "price": {
+       "amount": 27.0,
+       "currency": "EUR"
+      },
+      "images": [
+       {
+        "id": "pj9keyqgev2z",
+        "average_color": "13C1AC",
+        "urls": {
+         "small": "https://cdn.wallapop.com/images/10420/lg/ka/__/c10420p1297609802/i6708558761.jpg?pictureSize=W320",
+         "medium": "https://cdn.wallapop.com/images/10420/lg/ka/__/c10420p1297609802/i6708558761.jpg?pictureSize=W640",
+         "big": "https://cdn.wallapop.com/images/10420/lg/ka/__/c10420p1297609802/i6708558761.jpg?pictureSize=W800"
+        }
+       }
+      ],
+      "location": {
+       "latitude": 40.409988005158986,
+       "longitude": -3.696865017691748,
+       "postal_code": "28001",
+       "city": "Madrid",
+       "region": "Comunidad de Madrid",
+       "region2": "Madrid",
+       "country_code": "ES"
+      },
+      "web_slug": "sudadera-reservada-1",
+      "taxonomy": [
+       {
+        "id": 12465,
+        "name": "Fashion & accessories",
+        "icon": "t-shirt"
+       },
+       {
+        "id": 11003,
+        "name": "Men",
+        "icon": null
+       },
+       {
+        "id": 11031,
+        "name": "Clothes",
+        "icon": null
+       },
+       {
+        "id": 11036,
+        "name": "Jumpers & sweaters",
+        "icon": null
+       },
+       {
+        "id": 9893,
+        "name": "Hoodies & sweatshirts",
+        "icon": null
+       }
+      ],
+      "reserved": {
+       "flag": true
+      }
+     },
+     {
+      "id": "women1",
+      "title": "Sudadera mujer",
+      "description": "Sudadera con capucha de la marca Romwe, con un diseño oversize y una combinación",
+      "price": {
+       "amount": 5.0,
+       "currency": "EUR"
+      },
+      "images": [
+       {
+        "id": "8j3mgv9ml5y6",
+        "average_color": "13C1AC",
+        "urls": {
+         "small": "https://cdn.wallapop.com/images/10420/le/n4/__/c10420p1294382780/i6693602882.jpg?pictureSize=W320",
+         "medium": "https://cdn.wallapop.com/images/10420/le/n4/__/c10420p1294382780/i6693602882.jpg?pictureSize=W640",
+         "big": "https://cdn.wallapop.com/images/10420/le/n4/__/c10420p1294382780/i6693602882.jpg?pictureSize=W800"
+        }
+       }
+      ],
+      "location": {
+       "latitude": 40.4137311276334,
+       "longitude": -3.695006768172114,
+       "postal_code": "28070",
+       "city": "Madrid",
+       "region": "Comunidad de Madrid",
+       "region2": "Madrid",
+       "country_code": "ES"
+      },
+      "web_slug": "sudadera-mujer-1",
+      "taxonomy": [
+       {
+        "id": 12465,
+        "name": "Fashion & accessories",
+        "icon": "t-shirt"
+       },
+       {
+        "id": 11002,
+        "name": "Women",
+        "icon": null
+       },
+       {
+        "id": 11031,
+        "name": "Clothes",
+        "icon": null
+       },
+       {
+        "id": 11036,
+        "name": "Jumpers & sweaters",
+        "icon": null
+       },
+       {
+        "id": 9893,
+        "name": "Hoodies & sweatshirts",
+        "icon": null
+       }
+      ],
+      "reserved": {
+       "flag": false
+      }
+     },
+     {
+      "id": "noimg1",
+      "title": "Sudadera Romwe oversize morada y amarilla",
+      "description": "Sudadera con capucha de la marca Romwe, con un diseño oversize y una combinación",
+      "price": {
+       "amount": 5.0,
+       "currency": "EUR"
+      },
+      "images": [],
+      "location": {
+       "latitude": 40.4137311276334,
+       "longitude": -3.695006768172114,
+       "postal_code": "28070",
+       "city": "Madrid",
+       "region": "Comunidad de Madrid",
+       "region2": "Madrid",
+       "country_code": "ES"
+      },
+      "web_slug": "noimg-1",
+      "taxonomy": [
+       {
+        "id": 12465,
+        "name": "Fashion & accessories",
+        "icon": "t-shirt"
+       },
+       {
+        "id": 11003,
+        "name": "Men",
+        "icon": null
+       },
+       {
+        "id": 11031,
+        "name": "Clothes",
+        "icon": null
+       },
+       {
+        "id": 11036,
+        "name": "Jumpers & sweaters",
+        "icon": null
+       },
+       {
+        "id": 9893,
+        "name": "Hoodies & sweatshirts",
+        "icon": null
+       }
+      ],
+      "reserved": {
+       "flag": false
+      }
+     }
+    ]
+   }
+  }
+ },
+ "meta": {}
+}
