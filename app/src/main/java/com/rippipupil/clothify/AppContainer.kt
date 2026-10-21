@@ -1,0 +1,73 @@
+package com.rippipupil.clothify
+
+import android.content.Context
+import com.rippipupil.clothify.data.local.ClothifyDatabase
+import com.rippipupil.clothify.data.location.LocationProvider
+import com.rippipupil.clothify.data.pool.BasketRepository
+import com.rippipupil.clothify.data.pool.ProductPoolRepository
+import com.rippipupil.clothify.data.pool.ProfileRepository
+import com.rippipupil.clothify.data.pool.SettingsBudgetGate
+import com.rippipupil.clothify.data.settings.SettingsRepository
+import com.rippipupil.clothify.data.settings.settingsDataStore
+import com.rippipupil.clothify.data.sources.GoogleShoppingSource
+import com.rippipupil.clothify.data.sources.Throttle
+import com.rippipupil.clothify.data.sources.VintedSource
+import com.rippipupil.clothify.data.sources.WallapopSource
+import com.rippipupil.clothify.data.sources.WebViewVintedCookieProvider
+import com.rippipupil.clothify.data.style.GeminiStyleAnalyzer
+import com.rippipupil.clothify.data.style.StyleAnalyzer
+import com.rippipupil.clothify.domain.QueryPlanner
+import com.rippipupil.clothify.domain.Recommender
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
+import kotlin.random.Random
+
+/** Crea y conecta todas las piezas de la app (inyección de dependencias manual). */
+class AppContainer(context: Context) {
+    private val appContext = context.applicationContext
+
+    val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+
+    private val http = OkHttpClient.Builder()
+        .connectTimeout(15, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .build()
+
+    private val db = ClothifyDatabase.create(appContext)
+
+    val settings = SettingsRepository(appContext.settingsDataStore)
+    val profile = ProfileRepository(db)
+    val basket = BasketRepository(db)
+    val location = LocationProvider(appContext)
+    val recommender = Recommender(Random.Default)
+
+    val styleAnalyzer: StyleAnalyzer =
+        GeminiStyleAnalyzer(http, BuildConfig.GEMINI_API_KEY, BuildConfig.GEMINI_MODEL)
+
+    val pool = ProductPoolRepository(
+        db = db,
+        sources = listOf(
+            WallapopSource(http, Throttle(UNOFFICIAL_INTERVAL_MS)),
+            VintedSource(http, WebViewVintedCookieProvider(appContext), Throttle(UNOFFICIAL_INTERVAL_MS)),
+            GoogleShoppingSource(http, BuildConfig.SERPAPI_KEY, SettingsBudgetGate(settings)),
+        ),
+        planner = QueryPlanner(Random.Default),
+        profile = profile,
+        settings = settings,
+    )
+
+    /** "Borrar mis datos": vacía todo y vuelve a la bienvenida. */
+    suspend fun clearAllData() {
+        profile.clear()
+        basket.clear()
+        pool.clearAll()
+        settings.clear()
+    }
+
+    private companion object {
+        const val UNOFFICIAL_INTERVAL_MS = 3_000L
+    }
+}
