@@ -63,6 +63,12 @@ interface BasketDao {
     @Upsert
     suspend fun upsert(item: BasketItemEntity)
 
+    @Query("SELECT * FROM basket_item")
+    suspend fun all(): List<BasketItemEntity>
+
+    @Query("UPDATE basket_item SET currentPriceEur = :price, unavailable = :unavailable, checkedAtMillis = :at WHERE productId = :productId")
+    suspend fun updatePrice(productId: String, price: Double?, unavailable: Boolean, at: Long)
+
     @Query("DELETE FROM basket_item WHERE productId = :productId")
     suspend fun delete(productId: String)
 

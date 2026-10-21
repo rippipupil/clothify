@@ -67,6 +67,16 @@ android {
         buildConfig = true
     }
 
+    sourceSets {
+        // Esquemas exportados de Room para probar las migraciones (Robolectric lee los assets de debug;
+        // no llegan al APK release).
+        getByName("debug").assets.srcDir("$projectDir/schemas")
+    }
+
+    androidResources {
+        noCompress += "onnx"
+    }
+
     testOptions {
         unitTests.isIncludeAndroidResources = true
         unitTests.all { it.maxHeapSize = "2g" }
@@ -101,6 +111,8 @@ dependencies {
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
     implementation(libs.datastore.preferences)
+    implementation(libs.work.runtime)
+    implementation(libs.onnxruntime.android)
 
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
@@ -115,6 +127,8 @@ dependencies {
     testImplementation(libs.robolectric)
     testImplementation(libs.androidx.test.core)
     testImplementation(libs.okhttp.mockwebserver)
+    testImplementation(libs.room.testing)
+    testImplementation(libs.work.testing)
     testImplementation(platform(libs.compose.bom))
     testImplementation(libs.compose.ui.test.junit4)
 }

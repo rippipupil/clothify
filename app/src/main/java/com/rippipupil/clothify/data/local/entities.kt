@@ -1,5 +1,6 @@
 package com.rippipupil.clothify.data.local
 
+import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -29,6 +30,10 @@ data class BasketItemEntity(
     @PrimaryKey val productId: String,
     @Embedded val columns: ProductColumns,
     val addedAtMillis: Long,
+    /** Último precio comprobado; null si nunca se ha comprobado. */
+    val currentPriceEur: Double? = null,
+    @ColumnInfo(defaultValue = "0") val unavailable: Boolean = false,
+    val checkedAtMillis: Long? = null,
 )
 
 @Entity(tableName = "tag_score")
