@@ -59,14 +59,6 @@ class AppContainer(context: Context) {
         settings = settings,
     )
 
-    /** "Borrar mis datos": vacía todo y vuelve a la bienvenida. */
-    suspend fun clearAllData() {
-        profile.clear()
-        basket.clear()
-        pool.clearAll()
-        settings.clear()
-    }
-
     private companion object {
         const val UNOFFICIAL_INTERVAL_MS = 3_000L
     }
