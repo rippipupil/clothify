@@ -23,6 +23,21 @@ jobs:
       # Los runners ubuntu-latest ya traen el SDK de Android (ANDROID_HOME); AGP descarga lo que falte.
       - uses: gradle/actions/setup-gradle@v4
 
+      # Modelo CLIP para analizar fotos en el móvil (~89 MB). No está en git: se descarga y se guarda en caché.
+      - uses: actions/cache@v4
+        with:
+          path: app/src/main/assets/clip/vision_model_quantized.onnx
+          key: clip-vit-base-patch32-vision-quantized-v1
+
+      - name: Download on-device AI model
+        run: |
+          MODEL=app/src/main/assets/clip/vision_model_quantized.onnx
+          if [ ! -s "$MODEL" ]; then
+            curl -sSfL --retry 3 -o "$MODEL" \
+              https://huggingface.co/Xenova/clip-vit-base-patch32/resolve/main/onnx/vision_model_quantized.onnx
+          fi
+          test "$(stat -c %s "$MODEL")" -gt 80000000
+
       - name: Decode own signing key (optional)
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
@@ -35,6 +50,9 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+          ALIEXPRESS_APP_KEY: ${{ secrets.ALIEXPRESS_APP_KEY }}
+          ALIEXPRESS_APP_SECRET: ${{ secrets.ALIEXPRESS_APP_SECRET }}
+          ALIEXPRESS_TRACKING_ID: ${{ secrets.ALIEXPRESS_TRACKING_ID }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}

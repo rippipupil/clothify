@@ -30,6 +30,9 @@ android {
         versionCode = ciVersionCode
         versionName = "1.0.$ciVersionCode"
 
+        // Solo móviles ARM: reduce el tamaño del APK (ONNX Runtime trae librerías nativas por arquitectura).
+        ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a") }
+
         buildConfigField("String", "GEMINI_API_KEY", "\"${secret("GEMINI_API_KEY")}\"")
         buildConfigField("String", "SERPAPI_KEY", "\"${secret("SERPAPI_KEY")}\"")
         buildConfigField("String", "ALIEXPRESS_APP_KEY", "\"${secret("ALIEXPRESS_APP_KEY")}\"")
